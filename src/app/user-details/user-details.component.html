@@ -1,0 +1,7 @@
+<div *ngIf="user">
+    <h2>User Details</h2>
+    <div *ngFor="let key of objectKeys(user)">
+      <strong>{{ key }}:</strong> {{ user[key] }}
+    </div>
+</div>
+  

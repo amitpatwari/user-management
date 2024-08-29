@@ -1,0 +1,53 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th *ngFor="let header of headers">{{ header }}</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr
+      *ngFor="
+        let user of users
+          | paginate : { itemsPerPage: itemsPerPage, currentPage: page }
+      "
+      [class.editing]="editMode && editedRow?.id === user.id"
+    >
+      <td *ngFor="let header of headers">
+        <ng-container *ngIf="!editMode || editedRow?.id !== user.id">
+          <div (click)="viewDetails(user, $event)">
+            {{ user[header] }}
+          </div>
+        </ng-container>
+        <ng-container *ngIf="editMode && editedRow?.id === user.id">
+          <input
+            [(ngModel)]="editedRow[header]"
+            class="form-control"
+            (click)="$event.stopPropagation()"
+          />
+        </ng-container>
+      </td>
+      <td *ngIf="editMode && editedRow?.id === user.id">
+        <button
+          (click)="saveRow(user); $event.stopPropagation()"
+          class="btn btn-success btn-sm"
+        >
+          Save
+        </button>
+        <button
+          (click)="cancelEdit(); $event.stopPropagation()"
+          class="btn btn-secondary btn-sm"
+        >
+          Cancel
+        </button>
+      </td>
+      <td *ngIf="!editMode">
+        <i class="fa fa-edit edit-icon" style="font-size:24px" (click)="editRow(user); $event.stopPropagation()"></i>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="pagination-container">
+  <pagination-controls (pageChange)="page = $event"></pagination-controls>
+</div>
